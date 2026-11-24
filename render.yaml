@@ -3,7 +3,7 @@
 # Blueprint: one backend Web Service + one frontend Static Site.
 # Live URLs (names decide the hosts — do not rename a service without
 # updating the URL in the other service's env vars):
-#   Frontend: https://medilens-ai.onrender.com
+#   Frontend: https://medilens-ai-p08e.onrender.com  (Render appended -p08e; medilens-ai.onrender.com was taken)
 #   Backend:  https://medilens-ai-api.onrender.com  (health: /api/health)
 #
 # FREE-TIER WARNING: Render's disk is ephemeral. The SQLite database
@@ -27,7 +27,7 @@ services:
       - key: MEDILENS_SECRET_KEY
         generateValue: true
       - key: FRONTEND_URL
-        value: https://medilens-ai.onrender.com
+        value: https://medilens-ai-p08e.onrender.com
 
   - type: web
     name: medilens-ai
