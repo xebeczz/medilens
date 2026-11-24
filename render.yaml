@@ -1,5 +1,5 @@
 # MediLens AI — Render deploy (free tier, no card needed).
-# Repo: xebeczz/medilens-ai  (create it in the browser first — see DEPLOY_RENDER.md)
+# Repo: xebeczz/medilens
 # Blueprint: one backend Web Service + one frontend Static Site.
 # Live URLs (names decide the hosts — do not rename a service without
 # updating the URL in the other service's env vars):
@@ -29,10 +29,9 @@ services:
       - key: FRONTEND_URL
         value: https://medilens-ai.onrender.com
 
-  - type: web
+  - type: static
     name: medilens-ai
     env: static
-    plan: free
     rootDir: frontend
     buildCommand: npm install && npm run build
     staticPublishPath: dist
