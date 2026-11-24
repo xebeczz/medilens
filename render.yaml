@@ -29,9 +29,9 @@ services:
       - key: FRONTEND_URL
         value: https://medilens-ai.onrender.com
 
-  - type: static
+  - type: web
     name: medilens-ai
-    env: static
+    runtime: static
     rootDir: frontend
     buildCommand: npm install && npm run build
     staticPublishPath: dist
