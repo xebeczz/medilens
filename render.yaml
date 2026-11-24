@@ -1,0 +1,47 @@
+# MediLens AI — Render deploy (free tier, no card needed).
+# Repo: xebeczz/medilens-ai  (create it in the browser first — see DEPLOY_RENDER.md)
+# Blueprint: one backend Web Service + one frontend Static Site.
+# Live URLs (names decide the hosts — do not rename a service without
+# updating the URL in the other service's env vars):
+#   Frontend: https://medilens-ai.onrender.com
+#   Backend:  https://medilens-ai-api.onrender.com  (health: /api/health)
+#
+# FREE-TIER WARNING: Render's disk is ephemeral. The SQLite database
+# (medilens.db) and backend/uploads/ are WIPED on every restart/redeploy.
+# Accounts and uploaded reports do NOT survive. Recovery is one step:
+# log in with the demo account demo@medilens.ai / demo1234 — the frontend
+# auto-registers it on first login if it does not exist yet — then
+# re-upload the sample report (samples/sample-medical-report-cbc.pdf).
+# Do not present local SQLite as durable storage.
+services:
+  - type: web
+    name: medilens-ai-api
+    env: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.3
+      - key: MEDILENS_SECRET_KEY
+        generateValue: true
+      - key: FRONTEND_URL
+        value: https://medilens-ai.onrender.com
+
+  - type: web
+    name: medilens-ai
+    env: static
+    plan: free
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: VITE_API_URL
+        value: https://medilens-ai-api.onrender.com/api
